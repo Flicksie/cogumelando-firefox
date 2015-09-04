@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+  <head>
+  <meta charset="utf-8" />
+    <title>:placeholder:</title>
+    <style>
+      body {
+        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+        font-size: 100%;
+        background-color: #f6f5f5;
+        width: 300px
+      }
+      div#window{
+        text-align:center;
+      }
+      #status {
+        white-space: pre;
+        text-overflow: ellipsis;
+        overflow: hidden;
+		width: 400px;
+
+      }
+
+	 p{
+         text-align: center;
+	// background-color:#5b9f5e;
+	 border-radius:7px;
+	 //padding:10px;
+	  //line-height: 90px
+
+     width: auto;
+	 }
+     a{
+        color:white;
+        text-decoration:none;
+     }
+
+    #live{
+
+    }
+
+	.corolho{
+	vertical-align:top;
+	text-align: left;
+		/*width:180px;*/
+    display:inline-block;
+    padding: 6px 7px 3px 7px;
+    border-top:1px solid #5b9f5e;
+    color:#fff;
+    border-radius:4px;
+    box-shadow:rgba(0,0,0,1) 0 1px 0;
+    text-shadow:rgba(0,0,0,.4) 0 1px 0;
+    text-decoration:none;
+    background:#5b9f5e;
+    background-repeat:no-repeat;
+    background-image:-webkit-linear-gradient(
+        top left,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.2) 37%,
+        rgba(255, 255, 255, 0.8) 45%,
+        rgba(255, 255, 255, 0.0) 50%
+    ),
+    -webkit-linear-gradient(
+        #5b9f5e, #31622f
+    );
+    background-image:-moz-linear-gradient(
+        0 0,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.2) 37%,
+        rgba(255, 255, 255, 0.8) 45%,
+        rgba(255, 255, 255, 0.0) 50%
+    ),
+    -moz-linear-gradient(
+        #5b9f5e, #31622f
+    );
+    background-image:-o-linear-gradient(
+        0 0,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.2) 37%,
+        rgba(255, 255, 255, 0.8) 45%,
+        rgba(255, 255, 255, 0.0) 50%
+    ),
+    -o-linear-gradient(
+        #5b9f5e, #31622f
+    );
+    background-image:linear-gradient(
+        0 0,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.2) 37%,
+        rgba(255, 255, 255, 0.8) 45%,
+        rgba(255, 255, 255, 0.0) 50%
+    ),
+
+    );
+    background-position:-100px -100px, 0 0;
+    -moz-background-size:250% 250%, 100% 100%;
+         background-size:250% 250%, 100% 100%;
+    -webkit-transition:background-position 0s ease;
+       -moz-transition:background-position 0s ease;
+         -o-transition:background-position 0s ease;
+            transition:background-position 0s ease;
+}
+
+.corolho:hover {
+    color:#fff;
+	   box-shadow: 0px 2px 5px 1px #1e4b1a;
+    background-position:0 0, 0 0;
+    -webkit-transition-duration:0.5s;
+       -moz-transition-duration:0.5s;
+            transition-duration:0.5s;
+}
+        .twitch{
+            font-weight: bold;
+        }
+        #menu{
+            margin: -5px auto -12px auto;
+            height: 18px;
+        }
+        small{
+            font-size: 12px;
+            color: #2d9a48;
+        }
+        div#slogan{
+            margin-top: -11px
+        }
+        .live:focus{
+            outline-color: #4FF946;;
+            outline-style: dotted;
+        }
+    </style>
+
+  </head>
+  <body>
+
+	<div id="window">
+        <img style="width:100%" src="cogulogo.png"> </img> <br>
+        <div id="slogan" style="center"><i>A princesa está em outro castelo</i></div>
+        <p id="menu">
+
+        </p>
+	    <p>
+            <a class="corolho live" href="http://www.twitch.tv/cogumelandooficial/" target="_blank" title="Canal do Twitch">
+                <img class="icon" src="live.png"></a>
+            <a class="corolho" href="https://www.facebook.com/Cogumelando" target="_blank" title="Página do Facebook">
+                <img class="icon" src="face.png"></a>
+            <a class="corolho" href="http://www.cogumelando.com.br/" target="_blank" title="Site oficial">
+                <img class="icon" src="placeholder.png"></a>
+            <a class="corolho" href="options.html" target="_blank" title="Opções">
+                <img class="icon" src="opt.png"></a>
+	    </p>
+    </div>
+    <div>
+        <div class="twitch">
+
+        </div>
+        <div class="twitch">
+
+        </div>
+        <div class="twitch">
+
+        </div>
+    </div>
+
+    <span>
+        <input type="checkbox" id="sound" name="sound" value="">
+        <label for="sound">Desabilitar som</label>
+    </span>
+
+  </body>
+  <script src="popup.js" charset="utf-8"></script>
+</html>
