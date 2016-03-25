@@ -1,4 +1,4 @@
-console.log("deu1");
+console.log("-- Panel Controller --");
 // força a desativação do cache do ajax
 $.ajaxSetup({cache:false});
 

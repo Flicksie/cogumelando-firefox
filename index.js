@@ -11,9 +11,13 @@ var twitch = {
     username: 'cogumelandooficial',
     streamTitle: 'LIVE',
     offAirTitle: 'OFF',
-    offAirMessage: 'Off-air',
+    offAirMessage: 'Aguarde e Xonfie',
     notifySfx: '../assets/adanado.ogg',
     isStreaming: false
+};
+
+var configs = {
+    badgeLabel: twitch.name+' 🔁'
 };
 
 persistent.storage.twitch = twitch;
@@ -30,7 +34,7 @@ if (persistent.storage.interval === undefined) {
 
 var button = ToggleButton({
   id: "cogux",
-  label: "Cogumelando",
+  label: configs.badgeLabel,
   icon: {
     "24": "./icon-24.png",
     "32": "./icon-32.png",
@@ -38,11 +42,11 @@ var button = ToggleButton({
   },
   onChange: handleChange,
   badge: "...",
-  badgeColor: "#b4b4b4"
+  badgeColor: "rgba(153, 153, 153, 0.46)"
 });
 
 var panel = panels.Panel({
-    contentURL: self.data.url("panel.html"),
+    contentURL: self.data.url("pages/panel.html"),
     contentScriptFile: [self.data.url("scripts/jquery.min.js"), self.data.url("scripts/panel-controller.js")],
     onHide: handleHide,
     width: 320,
@@ -63,7 +67,10 @@ function handleChange(state) {
 }
 
 function handleHide() {
-  button.state('window', {checked: false});
+    button.state('window', {
+        checked: false,
+        label: configs.badgeLabel
+    });
 }
 
 function setPersistent(name, value) {
@@ -78,7 +85,7 @@ function liveNotify(msg, url) {
         data: url,
         onClick: function (data) {
             if (data === 'options') {
-                showOptions();
+                showOptions('pages/options.html');
             }else {
                 tabs.open(data);
             }
@@ -86,21 +93,39 @@ function liveNotify(msg, url) {
     });
 }
 
-function showOptions(){
+function showOptions(_url){
     tabs.open({
         url: _url,
         onReady: function(tab) {
-            var worker = tab.attach({
-                contentScriptFile: self.data.url("scripts/options-controller.js"),
-                contentScriptOptions: {
-                    a: "blah"
-                }
+            var options = tab.attach({
+                contentScriptFile: self.data.url("scripts/options-controller.js")
             });
-            worker.port.on("html", function(message) {
+            options.port.on("html", function(message) {
                 console.log(message);
             });
         }
     });
+}
+
+function setBadgeStatus(label, txt, color){
+    configs.badgeLabel = label;
+    button.state('window', {"label" : label});
+    button.badge = txt;
+    button.badgeColor = color;
+}
+
+function setBadgeIdle() {
+    setBadgeStatus(twitch.name+' 🔁', '...', 'rgba(153,153,153,0.46)');
+}
+
+function setBadgeStream(game) {
+    var label = twitch.name;
+    if(game) label += ' 🎮 '+game;
+    setBadgeStatus(label, twitch.streamTitle, 'rgba(0,221,0,0.46)');
+}
+
+function setBadgeOff() {
+    setBadgeStatus(twitch.name+' ☕ '+twitch.offAirMessage, twitch.offAirTitle, 'rgba(221,0,0,0.46)');
 }
 
 // Events //
@@ -109,7 +134,7 @@ panel.port.on('tab', function (url) {
 });
 
 panel.port.on('options', function (_url) {
-    showOptions();
+    showOptions(_url);
 });
 
 panel.port.on('resize', function (x, y) {
