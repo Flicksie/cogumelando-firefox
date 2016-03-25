@@ -1,0 +1,93 @@
+body {
+    background-color: #4B7945;
+}
+div#options{
+    color: #fff;
+    margin: 0 auto;
+    border: solid 5px white;
+        border-radius: 4px;
+    background-repeat: repeat-x;
+    background-image: url(../assets/leveloptions.png);
+    background-size: 1000px;
+    width: 770px;
+    height: 590px;
+    padding: 0 27px;
+}
+h2, h3{
+    text-shadow: 1px 1px 2px #0B0B35;
+}
+button, img#reset{
+    cursor: -webkit-grabbing;
+}
+.loop button {
+    width: 55px
+}
+button{
+    background-color: #DEBD56;
+    border: solid 2px #BB7517;
+    color: #994806;
+    padding: 4px;
+    border-radius: 4px;
+}
+button.pressed {
+    background-color: #449E3B;
+    color: #fff;
+    border-color: #89B72B;
+    box-shadow: inset 1px 1px 1px green;
+    text-shadow: 2px 1px 2px green;
+}
+div.button{
+    display: none;
+    border: solid 2px red;
+    position: relative;
+    width: 30px;
+    height: 30px;
+    cursor: help;
+}
+#but1{
+    top: 36%;
+    left: 43.9%;
+}
+#but2{
+    top: 52.9%;
+    left: 18.9%;
+}
+#but3{
+    top: 46.9%;
+    left: 39.8%;
+}
+#but4{
+    top: 41.2%;
+    left: 48.1%;
+}
+li{
+    list-style: none;
+}
+#author{
+    float: right;
+    position: relative;
+    bottom: -11%;
+    text-shadow: 1px 1px 1px black;
+    padding: 1px;
+}
+a{
+    color: #fff;
+    text-decoration: none;
+}
+#author li{
+    cursor: pointer;
+    width: 112px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.38);
+}#author li:hover{
+    background-color: rgba(0, 0, 0, 0.5);
+}
+#author img {
+    margin-top: 1px;
+    margin-bottom: -2px;
+}
+#author span {
+    position: relative;
+    bottom: 5px;
+}

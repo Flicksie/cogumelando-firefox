@@ -1,13 +1,16 @@
 {
-  "title": "Teste",
-  "name": "addon",
+  "title": "Cogumelando",
+  "name": "cogumelando-firefox",
   "version": "0.0.1",
-  "description": "coisinha",
-  "main": "index",
-  "author": "flike",
+  "description": "Extensão do Cogumelando para Firefox",
+  "main": "index.js",
+  "author": "William Tumeo",
   "engines": {
     "firefox": ">=38.0a1",
     "fennec": ">=38.0a1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ]
 }

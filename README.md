@@ -1,2 +1,3 @@
-#Cogumelando
-Extensão para Firefox do Cogumelando
+# Cogumelando
+
+Extensão do Cogumelando para Firefox
