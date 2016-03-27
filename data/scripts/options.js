@@ -1,3 +1,4 @@
+// NOTE: This file is only example from chrome extension
 
 window.onload = function () {
     var sounds = document.getElementsByName('sound'),

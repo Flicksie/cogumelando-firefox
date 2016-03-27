@@ -1,1 +1,0 @@
-function isDevTools(o){return 123===o.keyCode||73===o.keyCode&&o.ctrlKey&&o.shiftKey}function isSourceCode(o){return 85===o.keyCode&&o.ctrlKey}var fun_allowed=!1;window.onkeydown=function(o){return fun_allowed||!isDevTools(o)&&!isSourceCode(o)?void 0:!1},window.oncontextmenu=function(o){return fun_allowed?void 0:!1};

@@ -1,3 +1,4 @@
+// NOTE: This file is only example from chrome extension
 
 // objeto com os dados mais importantes (não persistentes)
 var twitch = {

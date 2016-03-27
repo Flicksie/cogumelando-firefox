@@ -1,3 +1,5 @@
+// NOTE: This file is only example from chrome extension
+
 chrome.runtime.onInstalled.addListener(function(details){
     chrome.alarms.create("mainLoop", {delayInMinutes: 0.3,periodInMinutes: 1});
     mythInit();
