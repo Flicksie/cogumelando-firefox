@@ -1,3 +1,4 @@
+var { setInterval, clearInterval } = require("sdk/timers");
 var { ToggleButton } = require('sdk/ui/button/toggle');
 var notifications = require("sdk/notifications");
 var persistent = require("sdk/simple-storage");
@@ -12,24 +13,34 @@ var twitch = {
     streamTitle: 'LIVE',
     offAirTitle: 'OFF',
     offAirMessage: 'Aguarde e Xonfie',
-    notifySfx: '../assets/adanado.ogg',
-    isStreaming: false
+    notifySfx: '../assets/adanado.ogg'
 };
 
 var configs = {
-    badgeLabel: twitch.name+' 🔁'
+    badgeLabel: twitch.name+' 🔁',
+    mainLoop: undefined
 };
 
+// Storage do twitch. Simbólico por enquanto
 persistent.storage.twitch = twitch;
 
+setPersistent('streaming', false);
+
 if (persistent.storage.notify === undefined) {
-    persistent.storage.notify = true;
+    setPersistent('notify', true);
 }
 if (persistent.storage.sound === undefined) {
-    persistent.storage.sound = true;
+    setPersistent('sound', true);
 }
 if (persistent.storage.interval === undefined) {
-    persistent.storage.interval = 1;
+    setPersistent('interval', 1);
+}
+if (persistent.storage.installed === undefined) {
+    liveNotify(
+        "Notificações estão ativadas, se quiser desativar entre nas opções.",
+        "options"
+    );
+    setPersistent('installed', true);
 }
 
 var button = ToggleButton({
@@ -47,7 +58,11 @@ var button = ToggleButton({
 
 var panel = panels.Panel({
     contentURL: self.data.url("pages/panel.html"),
-    contentScriptFile: [self.data.url("scripts/jquery.min.js"), self.data.url("scripts/panel-controller.js")],
+    contentScriptFile: [
+        self.data.url("scripts/jquery.min.js"),
+        self.data.url("scripts/howler.min.js"),
+        self.data.url("scripts/panel-controller.js")
+    ],
     onHide: handleHide,
     width: 320,
     height: 210
@@ -59,10 +74,6 @@ function handleChange(state) {
             position: button
         });
         panel.port.emit('open', persistent.storage, twitch);
-        liveNotify(
-            "Notificações estão ativadas, se quiser desativar entre nas opções.",
-            "options"
-        );
     }
 }
 
@@ -75,6 +86,10 @@ function handleHide() {
 
 function setPersistent(name, value) {
     persistent.storage[name] = value;
+}
+
+function getPersistent(name) {
+    return persistent.storage[name];
 }
 
 function liveNotify(msg, url) {
@@ -128,6 +143,15 @@ function setBadgeOff() {
     setBadgeStatus(twitch.name+' ☕ '+twitch.offAirMessage, twitch.offAirTitle, 'rgba(221,0,0,0.46)');
 }
 
+// Intervalos //
+var testx = 0;
+function mainLoop(){
+    panel.port.emit('livecheck', persistent.storage);
+}
+
+configs.mainLoop = setInterval(mainLoop, 10000);
+
+
 // Events //
 panel.port.on('tab', function (url) {
     tabs.open(url);
@@ -146,4 +170,47 @@ panel.port.on('resize', function (x, y) {
 
 panel.port.on('persist', function (name, value) {
     setPersistent(name, value);
+});
+
+panel.port.on('twitch-received', function (twitchJson) {
+    // checa se está acontecendo uma live
+    if(twitchJson.stream){ // live acontecendo
+        // joga todos os dados da live nos dados persistentes
+        setPersistent('channel',JSON.stringify(twitchJson.stream));
+        // cria um link para o nome do jogo
+        twitch.game = twitchJson.stream.game;
+
+        // faz uma checagem pra saber se no loop anterior já estava em live
+        if(!getPersistent('streaming')){
+            // muda o estado de live para true
+            setPersistent('streaming',true);
+
+            // se as notificações estiverem ativadas
+            if(getPersistent('notify')){
+                var liveGame = twitch.game != null ? twitch.game : "live";
+                liveNotify(
+                    "É TEMPO! Começando "+liveGame+" ao vivo agora!",
+                    'http://www.twitch.tv/cogumelandooficial/'
+                );
+            }
+            // se as notificações sonoras estiverem ativadas
+            if (getPersistent('sound')) {
+                // toca o ADANADO
+                panel.port.emit('sound-notify', twitch.notifySfx);
+            }
+        }
+
+        // altera as informações do botão
+        setBadgeStream(twitch.game);
+
+    }else{ // canal offline
+        // altera o estado de stream pra offline
+        setPersistent('streaming',false);
+        // altera as informações do botão (parecido com o que está acima)
+        setBadgeOff();
+    }
+});
+
+panel.port.on('connection-error', function () {
+    setBadgeIdle();
 });

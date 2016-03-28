@@ -53,7 +53,7 @@ function setCursorEvent(element, help){
     }
 }
 
-function setStreamSuggestion() {
+function showStreamSuggestion() {
     console.log("Ajax init");
     $.ajax(
         {
@@ -102,7 +102,35 @@ disableSound.onchange = function(){
     }
 };
 
-// Main:: on open
+function playNotificationSound(sfx) {
+    // se as notificações sonoras estiverem ativadas
+    // toca o ADANADO
+    var notify = new Howl({
+        urls: [sfx]
+    }).play();
+}
+
+// Método que faz o request ajax no canal do twitch
+// @username: usuário do twitch
+function getTwitch(username){
+    $.ajax({
+        url:'https://api.twitch.tv/kraken/streams/'+username,
+        success:function(channel) {
+            // método executado se o ajax tiver sucesso
+            self.port.emit('twitch-received', channel);
+        },
+        error:function() {
+            // método executado caso não tenha sucesso
+            // isso pode acontecer caso esteja sem internet
+            // ou alguma issue da extensão ou do navegador
+            self.port.emit('connection-error');
+        }
+    });
+}
+
+// Main-> Listeners
+
+// On popup open
 self.port.on("open", function(persist, twitch){
     console.log(persist.sound);
     clearTwitchElements();
@@ -111,6 +139,17 @@ self.port.on("open", function(persist, twitch){
     if (twitch.isStreaming) { // on stream
 
     }else { // off
-        setStreamSuggestion();
+        showStreamSuggestion();
     }
+});
+
+// On livecheck
+self.port.on("livecheck", function(persist){
+    console.log(Object.keys(persist));
+    getTwitch(persist.twitch.username);
+});
+
+// On sound notify
+self.port.on("sound-notify", function(soundfile){
+    playNotificationSound(soundfile);
 });
