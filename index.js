@@ -9,7 +9,7 @@ var tabs = require("sdk/tabs");
 // objeto com os dados mais importantes (não persistentes)
 var twitch = {
     name: 'Cogumelando',
-    username: 'cogumelandooficial',
+    username: 'canalbrogames',//'cogumelandooficial',
     streamTitle: 'LIVE',
     offAirTitle: 'OFF',
     offAirMessage: 'Aguarde e Xonfie',
@@ -60,6 +60,7 @@ var panel = panels.Panel({
     contentURL: self.data.url("pages/panel.html"),
     contentScriptFile: [
         self.data.url("scripts/jquery.min.js"),
+        self.data.url("scripts/img_loader.min.js"),
         self.data.url("scripts/howler.min.js"),
         self.data.url("scripts/panel-controller.js")
     ],
@@ -143,14 +144,19 @@ function setBadgeOff() {
     setBadgeStatus(twitch.name+' ☕ '+twitch.offAirMessage, twitch.offAirTitle, 'rgba(221,0,0,0.46)');
 }
 
+function setMainInterval(min) {
+    if (configs.mainLoop) {
+        clearInterval(configs.mainLoop);
+    }
+    configs.mainLoop = setInterval(mainLoop, min * 60000);
+}
+
 // Intervalos //
-var testx = 0;
 function mainLoop(){
     panel.port.emit('livecheck', persistent.storage);
 }
 
-configs.mainLoop = setInterval(mainLoop, 10000);
-
+setMainInterval(getPersistent('interval'));
 
 // Events //
 panel.port.on('tab', function (url) {
@@ -176,18 +182,18 @@ panel.port.on('twitch-received', function (twitchJson) {
     // checa se está acontecendo uma live
     if(twitchJson.stream){ // live acontecendo
         // joga todos os dados da live nos dados persistentes
-        setPersistent('channel',JSON.stringify(twitchJson.stream));
+        setPersistent('channel', twitchJson.stream);
         // cria um link para o nome do jogo
-        twitch.game = twitchJson.stream.game;
+        var game = twitchJson.stream.game;
 
         // faz uma checagem pra saber se no loop anterior já estava em live
         if(!getPersistent('streaming')){
             // muda o estado de live para true
-            setPersistent('streaming',true);
+            setPersistent('streaming', true);
 
             // se as notificações estiverem ativadas
             if(getPersistent('notify')){
-                var liveGame = twitch.game != null ? twitch.game : "live";
+                var liveGame = game != null ? game : "live";
                 liveNotify(
                     "É TEMPO! Começando "+liveGame+" ao vivo agora!",
                     'http://www.twitch.tv/cogumelandooficial/'
@@ -201,16 +207,14 @@ panel.port.on('twitch-received', function (twitchJson) {
         }
 
         // altera as informações do botão
-        setBadgeStream(twitch.game);
+        setBadgeStream(game);
 
     }else{ // canal offline
         // altera o estado de stream pra offline
-        setPersistent('streaming',false);
+        setPersistent('streaming', false);
         // altera as informações do botão (parecido com o que está acima)
         setBadgeOff();
     }
 });
 
-panel.port.on('connection-error', function () {
-    setBadgeIdle();
-});
+panel.port.on('connection-error', setBadgeIdle);

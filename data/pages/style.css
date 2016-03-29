@@ -138,12 +138,12 @@ background-position:0 0, 0 0;
   .live:focus{
       outline-color: #4FF946;;
       outline-style: dotted;
+      outline-width: 4px;
   }
   img.live-type{
       margin-bottom: 10px;
   }
   img.stream-preview{
       width: 95%;
-      border: solid 5px #386C37;
-      border-style: dotted;
+      border: dashed 5px #386C37;
   }

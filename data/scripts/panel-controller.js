@@ -2,6 +2,7 @@ console.log("-- Panel Controller --");
 // força a desativação do cache do ajax
 $.ajaxSetup({cache:false});
 
+var imgLoader = new ImageLoader();
 var buttons = document.getElementsByClassName('corolho'),
     menu = document.getElementById('menu'),
     buttonsHelp = [
@@ -82,6 +83,46 @@ function showStreamSuggestion() {
     );
 }
 
+function showStreamInfo(stream) {
+    var liveType = document.getElementsByTagName('img')[0];
+    // insere coisas da live no popup (título,nome do jogo, screenshot)
+    buttons[0].className = 'corolho live';
+    buttons[0].focus();
+
+    // Força o recarregamento da imagem
+    var imageForce = btoa(new Date().toJSON());
+
+    var liveTitle = stream.channel.status;
+    if(liveTitle.search("DAFM") !== -1){
+        liveType.className = 'live-type';
+        liveType.src = '../assets/dafm.png';
+    }else if(liveTitle.search("Game Quest") !== -1 || liveTitle.search("CGQ") !== -1){
+        liveType.className = 'live-type';
+        liveType.src = '../assets/cogugq.png';
+    }
+
+    twitchView[0].innerHTML = stream.game != null ? '<p>'+stream.game+'</p>' : '';
+    twitchView[1].innerHTML = '<p></p>';
+
+    var streamDefault = imgLoader.load(stream.channel.video_banner, {'class':'stream-preview', 'draggable':false});
+    imgLoader.onload(function () {
+        twitchView[1].firstChild.appendChild(streamDefault);
+        resetSize();
+
+        var streamImg = imgLoader.load(
+            stream.preview.medium+'?force='+imageForce,
+            {'draggable':false, 'class':'stream-preview'}
+        );
+        imgLoader.onload(function () {
+            twitchView[1].innerHTML = '<p></p>';
+            twitchView[1].firstChild.appendChild(streamImg);
+            resetSize();
+        });
+    });
+
+    twitchView[2].innerHTML = '<p>'+liveTitle+'</p>';
+}
+
 function clearTwitchElements() {
     console.log("Clear Twitch");
     twitchView[0].innerHTML = '';
@@ -112,20 +153,35 @@ function playNotificationSound(sfx) {
 
 // Método que faz o request ajax no canal do twitch
 // @username: usuário do twitch
-function getTwitch(username){
+function getTwitch(username, callback){
+    callback = callback || function (channel) {};
     $.ajax({
         url:'https://api.twitch.tv/kraken/streams/'+username,
         success:function(channel) {
             // método executado se o ajax tiver sucesso
             self.port.emit('twitch-received', channel);
+            callback(channel);
         },
         error:function() {
             // método executado caso não tenha sucesso
             // isso pode acontecer caso esteja sem internet
             // ou alguma issue da extensão ou do navegador
             self.port.emit('connection-error');
+            callback(false);
         }
     });
+}
+
+function setPanelStream(channel){
+    if (channel) { // on stream
+        if (channel.stream) {
+            showStreamInfo(channel.stream);
+            resetSize();
+            return;
+        }
+    }
+    // off
+    showStreamSuggestion();
 }
 
 // Main-> Listeners
@@ -136,16 +192,11 @@ self.port.on("open", function(persist, twitch){
     clearTwitchElements();
     disableSound.checked = !persist.sound;
     resetSize();
-    if (twitch.isStreaming) { // on stream
-
-    }else { // off
-        showStreamSuggestion();
-    }
+    getTwitch(persist.twitch.username, setPanelStream);
 });
 
 // On livecheck
 self.port.on("livecheck", function(persist){
-    console.log(Object.keys(persist));
     getTwitch(persist.twitch.username);
 });
 

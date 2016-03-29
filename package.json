@@ -1,7 +1,7 @@
 {
   "title": "Cogumelando",
   "name": "cogumelando-firefox",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Extensão do Cogumelando para Firefox",
   "main": "index.js",
   "author": "William Tumeo",
@@ -11,6 +11,10 @@
   },
   "license": "MIT",
   "keywords": [
-    "jetpack"
+    "cogu",
+    "cogumelando",
+    "games",
+    "live",
+    "twitch"
   ]
 }

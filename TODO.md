@@ -7,9 +7,9 @@
 - [ ] Configs page working
 - [x] AJAX test `0.1.0`
 - [x] Notifications basic `0.1.0`
-- [x] Alarms/timers basic
-- [x] Chrome background implementation
-- [ ] Full implementation
+- [x] Alarms/timers basic `0.2.0`
+- [x] Chrome background implementation `0.2.0`
+- [x] Full implementation `0.3.0`
 - [ ] Add HDPI icons
 - [ ] Optimization
 - [ ] Bug fixes
