@@ -161,10 +161,12 @@ setMainInterval(getPersistent('interval'));
 // Events //
 panel.port.on('tab', function (url) {
     tabs.open(url);
+    panel.hide();
 });
 
 panel.port.on('options', function (_url) {
     showOptions(_url);
+    panel.hide();
 });
 
 panel.port.on('resize', function (x, y) {
