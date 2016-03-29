@@ -54,33 +54,45 @@ function setCursorEvent(element, help){
     }
 }
 
-function showStreamSuggestion() {
-    console.log("Ajax init");
+function getTwitchSuggestions(options, callback) {
+    callback = callback || function (videos) {};
     $.ajax(
         {
-            url:'https://api.twitch.tv/kraken/channels/cogumelandooficial/videos',
+            url:'https://api.twitch.tv/kraken/channels/cogumelandooficial/videos/?'+options,
             success: function(result){
-                console.log("Sucesso");
-
-                function randomInt(min, max) {
-                    return Math.floor(Math.random() * (max - min + 1)) + min;
-                }
-                var rand = randomInt(0, result.videos.length-1);
-
-                twitchView[0].innerHTML = `
-                    <p class="click">
-                        Veja também: ${result.videos[rand].game}
-                    </p>`;
-                twitchView[0].onclick = function(){
-                    self.port.emit('tab', result.videos[rand].url);
-                };
-                resetSize();
+                callback(result);
             },
             error: function () {
                 console.log('Falha');
+                callback(false);
             }
         }
     );
+}
+
+function showStreamSuggestion() {
+    var videos = [];
+
+    function randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    getTwitchSuggestions('limit=10', function (result) {
+        videos = videos.concat(result.videos);
+        getTwitchSuggestions('broadcasts=true', function (result) {
+            videos = videos.concat(result.videos);
+            var rand = randomInt(0, videos.length-1);
+
+            twitchView[0].innerHTML = `
+                <p class="click">
+                    Veja também: ${videos[rand].game}
+                </p>`;
+            twitchView[0].onclick = function(){
+                self.port.emit('tab', videos[rand].url);
+            };
+            resetSize();
+        });
+    });
 }
 
 function showStreamInfo(stream) {
