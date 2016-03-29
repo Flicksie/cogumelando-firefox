@@ -9,7 +9,7 @@ var tabs = require("sdk/tabs");
 // objeto com os dados mais importantes (não persistentes)
 var twitch = {
     name: 'Cogumelando',
-    username: 'canalbrogames',//'cogumelandooficial',
+    username: 'cogumelandooficial',
     streamTitle: 'LIVE',
     offAirTitle: 'OFF',
     offAirMessage: 'Aguarde e Xonfie',
