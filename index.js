@@ -10,7 +10,7 @@ var tabs = require("sdk/tabs");
 var twitch = {
     name: 'Cogumelando',
     username: 'cogumelandooficial',
-    streamTitle: 'LIVE',
+    streamTitle: ' ',
     offAirTitle: 'OFF',
     offAirMessage: 'Aguarde e Xonfie',
     notifySfx: '../assets/adanado.ogg'
@@ -135,8 +135,8 @@ function setBadgeIdle() {
 }
 
 function setBadgeStream(game) {
-    var label = twitch.name;
-    if(game) label += ' 🎮 '+game;
+    var label = twitch.name+' 🎮 ';
+    if(game) label += game;
     setBadgeStatus(label, twitch.streamTitle, 'rgba(0,221,0,0.46)');
 }
 

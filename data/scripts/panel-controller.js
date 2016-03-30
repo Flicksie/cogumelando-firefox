@@ -20,6 +20,7 @@ var buttons = document.getElementsByClassName('corolho'),
         'pages/options.html'
     ],
     disableSound = document.getElementById('sound'),
+    coguLogo = document.getElementsByTagName('img')[0],
     twitchView = document.getElementsByClassName('twitch');
 
 
@@ -96,7 +97,6 @@ function showStreamSuggestion() {
 }
 
 function showStreamInfo(stream) {
-    var liveType = document.getElementsByTagName('img')[0];
     // insere coisas da live no popup (título,nome do jogo, screenshot)
     buttons[0].className = 'corolho live';
     buttons[0].focus();
@@ -106,33 +106,35 @@ function showStreamInfo(stream) {
 
     var liveTitle = stream.channel.status;
     if(liveTitle.search("DAFM") !== -1){
-        liveType.className = 'live-type';
-        liveType.src = '../assets/dafm.png';
+        coguLogo.className = 'live-type';
+        coguLogo.src = '../assets/dafm.png';
     }else if(liveTitle.search("Game Quest") !== -1 || liveTitle.search("CGQ") !== -1){
-        liveType.className = 'live-type';
-        liveType.src = '../assets/cogugq.png';
+        coguLogo.className = 'live-type';
+        coguLogo.src = '../assets/cogugq.png';
     }
 
     twitchView[0].innerHTML = stream.game != null ? '<p>'+stream.game+'</p>' : '';
     twitchView[1].innerHTML = '<p></p>';
+    setTimeout(resetSize, 100);
 
     var streamDefault = imgLoader.load(stream.channel.video_banner, {'class':'stream-preview', 'draggable':false});
     imgLoader.onload(function () {
         twitchView[1].firstChild.appendChild(streamDefault);
-        resetSize();
-
         var streamImg = imgLoader.load(
             stream.preview.medium+'?force='+imageForce,
             {'draggable':false, 'class':'stream-preview'}
         );
+
+        resetSize();
         imgLoader.onload(function () {
-            twitchView[1].innerHTML = '<p></p>';
+            twitchView[1].firstChild.removeChild(streamDefault);
             twitchView[1].firstChild.appendChild(streamImg);
-            resetSize();
+            setTimeout(resetSize, 100);
         });
     });
 
     twitchView[2].innerHTML = '<p>'+liveTitle+'</p>';
+    setTimeout(resetSize, 100);
 }
 
 function clearTwitchElements() {
@@ -200,6 +202,9 @@ function setPanelStream(channel){
 
 // On popup open
 self.port.on("open", function(persist, twitch){
+    coguLogo.src = '../assets/cogulogo.png';
+    // força o botão do twitch a ser somente da classe corolho
+    buttons[0].className = 'corolho';
     console.log(persist.sound);
     clearTwitchElements();
     disableSound.checked = !persist.sound;
