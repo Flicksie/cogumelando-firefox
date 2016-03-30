@@ -135,8 +135,8 @@ function setBadgeIdle() {
 }
 
 function setBadgeStream(game) {
-    var label = twitch.name+' 🎮 ';
-    if(game) label += game;
+    var label = twitch.name+' 🎮';
+    if(game) label += ' '+game;
     setBadgeStatus(label, twitch.streamTitle, 'rgba(0,221,0,0.46)');
 }
 
@@ -172,8 +172,8 @@ panel.port.on('options', function (_url) {
 panel.port.on('resize', function (x, y) {
     console.log('x = '+x);
     console.log('y = '+y);
-    panel.width = x + 19;
-    panel.height = y + 19;
+    panel.width = x + 16;
+    panel.height = y + 16;
 });
 
 panel.port.on('persist', function (name, value) {

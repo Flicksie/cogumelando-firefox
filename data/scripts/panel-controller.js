@@ -202,11 +202,16 @@ function setPanelStream(channel){
 
 // On popup open
 self.port.on("open", function(persist, twitch){
+    resetSize();
     coguLogo.src = '../assets/cogulogo.png';
+    clearTwitchElements();
+    twitchView[0].appendChild(document.createElement('p'));
+    twitchView[0].firstChild.appendChild(imgLoader.load('../assets/loading.gif',
+        {draggable:false, style:'width:24px'}
+    ));
     // força o botão do twitch a ser somente da classe corolho
     buttons[0].className = 'corolho';
     console.log(persist.sound);
-    clearTwitchElements();
     disableSound.checked = !persist.sound;
     resetSize();
     getTwitch(persist.twitch.username, setPanelStream);
