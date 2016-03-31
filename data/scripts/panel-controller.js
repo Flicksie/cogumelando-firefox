@@ -21,6 +21,7 @@ var buttons = document.getElementsByClassName('corolho'),
     ],
     disableSound = document.getElementById('sound'),
     coguLogo = document.getElementsByTagName('img')[0],
+    imageContainer = document.querySelector('.image-loader'),
     twitchView = document.querySelectorAll('.twitch p');
 
 var twitchTop = twitchView[0];
@@ -123,23 +124,22 @@ function showStreamInfo(stream) {
     twitchTop.innerHTML = stream.game != null ? stream.game : '';
     setTimeout(resetSize, 100);
 
-    var streamDefault = imgLoader.load(stream.channel.video_banner,
+    var streamDefault = imgLoader.load('../assets/coguinfo.png',
         {'class':'stream-preview', 'draggable':false}
     );
-    imgLoader.onload(function () {
-        twitchMid.appendChild(streamDefault);
-        var streamImg = imgLoader.load(
-            stream.preview.medium+'?force='+imageForce,
-            {'draggable':false, 'class':'stream-preview'}
-        );
+    
+    twitchMid.appendChild(streamDefault);
+    var streamImg = imgLoader.load(
+        stream.preview.medium+'?force='+imageForce,
+        {'draggable':false, 'class':'stream-preview'}
+    );
 
-        resetSize();
-        imgLoader.onload(function () {
-            twitchMid.removeChild(streamDefault);
-            twitchMid.appendChild(streamImg);
-            setTimeout(resetSize, 100);
-        });
-    });
+    imageContainer.appendChild(streamImg);
+    streamImg.onload = function () {
+        imageContainer.removeChild(this);
+        twitchMid.removeChild(streamDefault);
+        twitchMid.appendChild(this);
+    }
 
     twitchBottom.innerHTML = liveTitle;
     setTimeout(resetSize, 100);

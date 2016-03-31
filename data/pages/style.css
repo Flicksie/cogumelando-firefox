@@ -2,10 +2,6 @@ html {
     overflow: hidden;
 }
 
-load {
-    display: none;
-}
-
 body {
   font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
   font-size: 100%;
@@ -150,4 +146,10 @@ background-position:0 0, 0 0;
   img.stream-preview{
       width: 95%;
       border: dashed 5px #386C37;
+  }
+
+  div.image-loader {
+      width: 1px;
+      position:fixed;
+      right: -999999999px;
   }
