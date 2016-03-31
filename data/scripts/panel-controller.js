@@ -4,7 +4,7 @@ $.ajaxSetup({cache:false});
 
 var imgLoader = new ImageLoader();
 var buttons = document.getElementsByClassName('corolho'),
-    menu = document.getElementById('menu'),
+    menu = document.querySelector('#menu small'),
     buttonsHelp = [
         'Canal do Twitch',
         'Página do Facebook',
@@ -21,8 +21,17 @@ var buttons = document.getElementsByClassName('corolho'),
     ],
     disableSound = document.getElementById('sound'),
     coguLogo = document.getElementsByTagName('img')[0],
-    twitchView = document.getElementsByClassName('twitch');
+    twitchView = document.querySelectorAll('.twitch p');
 
+var twitchTop = twitchView[0];
+var twitchMid = twitchView[1];
+var twitchBottom = twitchView[2];
+
+Element.prototype.clear = function(){
+    while(this.firstChild){
+        this.removeChild(this.firstChild);
+    }
+};
 
 buttons[0].onclick = function(){
     self.port.emit('tab', buttonsUrl[0]);
@@ -48,7 +57,7 @@ for (var i = 0; i < buttons.length; i++) {
 // Método para inserir os textos dos botões
 function setCursorEvent(element, help){
     element.onmouseover = function(){
-        menu.innerHTML = '<small>'+help+'</small>';
+        menu.innerHTML = help;
     }
     element.onmouseout = function(){
         menu.innerHTML = '';
@@ -84,11 +93,9 @@ function showStreamSuggestion() {
             videos = videos.concat(result.videos);
             var rand = randomInt(0, videos.length-1);
 
-            twitchView[0].innerHTML = `
-                <p class="click">
-                    Veja também: ${videos[rand].game}
-                </p>`;
-            twitchView[0].onclick = function(){
+            twitchTop.className = 'click';
+            twitchTop.innerHTML = 'Veja também: '+videos[rand].game;
+            twitchTop.onclick = function(){
                 self.port.emit('tab', videos[rand].url);
             };
             resetSize();
@@ -113,13 +120,14 @@ function showStreamInfo(stream) {
         coguLogo.src = '../assets/cogugq.png';
     }
 
-    twitchView[0].innerHTML = stream.game != null ? '<p>'+stream.game+'</p>' : '';
-    twitchView[1].innerHTML = '<p></p>';
+    twitchTop.innerHTML = stream.game != null ? stream.game : '';
     setTimeout(resetSize, 100);
 
-    var streamDefault = imgLoader.load(stream.channel.video_banner, {'class':'stream-preview', 'draggable':false});
+    var streamDefault = imgLoader.load(stream.channel.video_banner,
+        {'class':'stream-preview', 'draggable':false}
+    );
     imgLoader.onload(function () {
-        twitchView[1].firstChild.appendChild(streamDefault);
+        twitchMid.appendChild(streamDefault);
         var streamImg = imgLoader.load(
             stream.preview.medium+'?force='+imageForce,
             {'draggable':false, 'class':'stream-preview'}
@@ -127,21 +135,22 @@ function showStreamInfo(stream) {
 
         resetSize();
         imgLoader.onload(function () {
-            twitchView[1].firstChild.removeChild(streamDefault);
-            twitchView[1].firstChild.appendChild(streamImg);
+            twitchMid.removeChild(streamDefault);
+            twitchMid.appendChild(streamImg);
             setTimeout(resetSize, 100);
         });
     });
 
-    twitchView[2].innerHTML = '<p>'+liveTitle+'</p>';
+    twitchBottom.innerHTML = liveTitle;
     setTimeout(resetSize, 100);
 }
 
+
 function clearTwitchElements() {
     console.log("Clear Twitch");
-    twitchView[0].innerHTML = '';
-    twitchView[1].innerHTML = '';
-    twitchView[2].innerHTML = '';
+    twitchTop.clear();
+    twitchMid.clear();
+    twitchBottom.clear();
 }
 
 function resetSize() {
@@ -204,9 +213,9 @@ function setPanelStream(channel){
 self.port.on("open", function(persist, twitch){
     resetSize();
     coguLogo.src = '../assets/cogulogo.png';
+    console.log(twitchTop);
     clearTwitchElements();
-    twitchView[0].appendChild(document.createElement('p'));
-    twitchView[0].firstChild.appendChild(imgLoader.load('../assets/loading.gif',
+    twitchTop.appendChild(imgLoader.load('../assets/loading.gif',
         {draggable:false, style:'width:24px'}
     ));
     // força o botão do twitch a ser somente da classe corolho
