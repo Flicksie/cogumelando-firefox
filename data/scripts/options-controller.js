@@ -6,4 +6,7 @@ var sounds = document.getElementsByName('sound'),
     reset = document.getElementById('reset'),
     minutes = [1,2,5,10,20,30];
 
-self.port.emit("html", document.body.innerHTML);
+
+reset.onclick = function () {
+    self.port.emit("config-change", 'POW');
+};

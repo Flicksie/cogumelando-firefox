@@ -11,7 +11,7 @@ var twitch = {
     name: 'Cogumelando',
     username: 'cogumelandooficial',
     streamTitle: ' ',
-    offAirTitle: 'OFF',
+    offAirTitle: ' ',
     offAirMessage: 'Aguarde e Xonfie',
     notifySfx: '../assets/adanado.ogg'
 };
@@ -21,10 +21,8 @@ var configs = {
     mainLoop: undefined
 };
 
-// Storage do twitch. Simbólico por enquanto
-persistent.storage.twitch = twitch;
-
 setPersistent('streaming', false);
+setPersistent('twitch', twitch);
 
 if (persistent.storage.notify === undefined) {
     setPersistent('notify', true);
@@ -74,7 +72,7 @@ function handleChange(state) {
         panel.show({
             position: button
         });
-        panel.port.emit('open', persistent.storage, twitch);
+        panel.port.emit('open', persistent.storage);
     }
 }
 
@@ -116,11 +114,30 @@ function showOptions(_url){
             var options = tab.attach({
                 contentScriptFile: self.data.url("scripts/options-controller.js")
             });
-            options.port.on("html", function(message) {
-                console.log(message);
+
+            options.port.on("config-change", function(config, value) {
+                configChange(config, value);
+                panel.port.emit('sound-notify', '../assets/pow.ogg');
+                tab.close();
             });
         }
     });
+}
+
+function configChange(config, value) {
+    if (config === 'sound') {
+        setPersistent('sound', value);
+    }else if (config === 'notify') {
+        setPersistent('notify', value);
+    }else if (config === 'interval') {
+        setPersistent('interval', value);
+        setMainInterval(value);
+    }else if (config === 'POW') {
+        setPersistent('notify', true);
+        setPersistent('sound', true);
+        setPersistent('interval', 1);
+        setMainInterval(1);
+    }
 }
 
 function setBadgeStatus(label, txt, color){
@@ -156,8 +173,6 @@ function mainLoop(){
     panel.port.emit('livecheck', persistent.storage);
 }
 
-setMainInterval(getPersistent('interval'));
-
 // Events //
 panel.port.on('tab', function (url) {
     tabs.open(url);
@@ -170,8 +185,6 @@ panel.port.on('options', function (_url) {
 });
 
 panel.port.on('resize', function (x, y) {
-    console.log('x = '+x);
-    console.log('y = '+y);
     panel.width = x + 16;
     panel.height = y + 16;
 });
@@ -220,3 +233,6 @@ panel.port.on('twitch-received', function (twitchJson) {
 });
 
 panel.port.on('connection-error', setBadgeIdle);
+
+// Main Loop
+setMainInterval(getPersistent('interval'));
