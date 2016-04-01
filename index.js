@@ -5,6 +5,7 @@ var persistent = require("sdk/simple-storage");
 var panels = require("sdk/panel");
 var self = require("sdk/self");
 var tabs = require("sdk/tabs");
+var version = require("./package.json").version;
 
 // objeto com os dados mais importantes (não persistentes)
 var twitch = {
@@ -23,6 +24,7 @@ var configs = {
 
 setPersistent('streaming', false);
 setPersistent('twitch', twitch);
+setPersistent('version', version);
 
 if (persistent.storage.notify === undefined) {
     setPersistent('notify', true);
@@ -115,10 +117,16 @@ function showOptions(_url){
                 contentScriptFile: self.data.url("scripts/options-controller.js")
             });
 
+            options.port.on('request-persistent', function () {
+                options.port.emit('persist-received', persistent.storage);
+            });
+
             options.port.on("config-change", function(config, value) {
                 configChange(config, value);
-                panel.port.emit('sound-notify', '../assets/pow.ogg');
-                tab.close();
+                if (config === 'POW') {
+                    panel.port.emit('sound-notify', '../assets/pow.ogg');
+                    tab.close();
+                }
             });
         }
     });
