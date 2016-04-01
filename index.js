@@ -1,3 +1,4 @@
+
 var { setInterval, clearInterval } = require("sdk/timers");
 var { ToggleButton } = require('sdk/ui/button/toggle');
 var notifications = require("sdk/notifications");
@@ -44,16 +45,17 @@ if (persistent.storage.installed === undefined) {
 }
 
 var button = ToggleButton({
-  id: "cogux",
-  label: configs.badgeLabel,
-  icon: {
-    "24": "./icon-24.png",
-    "32": "./icon-32.png",
-    "48": "./icon-48.png"
-  },
-  onChange: handleChange,
-  badge: "...",
-  badgeColor: "rgba(153, 153, 153, 0.46)"
+    id: "cogux",
+    label: configs.badgeLabel,
+    icon: {
+        "18": "./iconx18.png",
+        "32": "./iconx32.png",
+        "36": "./iconx36.png",
+        "64": "./iconx64.png"
+    },
+    onChange: handleChange,
+    badge: "...",
+    badgeColor: "rgba(153, 153, 153, 0.46)"
 });
 
 var panel = panels.Panel({

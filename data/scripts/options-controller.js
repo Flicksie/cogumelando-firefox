@@ -1,4 +1,3 @@
-console.log("-- Options Controller --");
 
 var sounds = document.getElementsByName('sound'),
     notify = document.getElementsByName('notify'),

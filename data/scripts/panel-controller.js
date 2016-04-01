@@ -1,4 +1,4 @@
-console.log("-- Panel Controller --");
+
 // força a desativação do cache do ajax
 $.ajaxSetup({cache:false});
 
@@ -74,7 +74,6 @@ function getTwitchSuggestions(options, callback) {
                 callback(result);
             },
             error: function () {
-                console.log('Falha');
                 callback(false);
             }
         }
@@ -127,7 +126,7 @@ function showStreamInfo(stream) {
     var streamDefault = imgLoader.load('../assets/coguinfo.png',
         {'class':'stream-preview', 'draggable':false}
     );
-    
+
     twitchMid.appendChild(streamDefault);
     var streamImg = imgLoader.load(
         stream.preview.medium+'?force='+imageForce,
@@ -147,7 +146,6 @@ function showStreamInfo(stream) {
 
 
 function clearTwitchElements() {
-    console.log("Clear Twitch");
     twitchTop.clear();
     twitchMid.clear();
     twitchBottom.clear();

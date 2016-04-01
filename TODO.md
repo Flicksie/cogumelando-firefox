@@ -10,6 +10,6 @@
 - [x] Alarms/timers basic `0.2.0`
 - [x] Chrome background implementation `0.2.0`
 - [x] Full implementation `0.3.0`
-- [ ] Add HDPI icons
+- [x] Add HDPI icons
 - [ ] Optimization
 - [ ] Bug fixes
