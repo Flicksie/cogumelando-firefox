@@ -122,10 +122,15 @@ function showOptions(_url){
             });
 
             options.port.on("config-change", function(config, value) {
-                configChange(config, value);
                 if (config === 'POW') {
+                    configChange(config);
                     panel.port.emit('sound-notify', '../assets/pow.ogg');
                     tab.close();
+                }else if(getPersistent(config) === value){
+                    panel.port.emit('sound-notify', '../assets/bump.ogg');
+                }else {
+                    panel.port.emit('sound-notify', '../assets/kick.ogg');
+                    configChange(config, value);
                 }
             });
         }
