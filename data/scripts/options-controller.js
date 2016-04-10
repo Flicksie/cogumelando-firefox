@@ -37,7 +37,7 @@ function configLoop(element, min){
         self.port.emit('config-change', 'interval', min);
         this.className = "pressed";
         for (var i = 0; i < loop.length; i++) {
-            if(loop[i].innerHTML !== min+" min"){
+            if(loop[i].textContent !== min+" min"){
                 loop[i].className = '';
             }
         }
@@ -73,7 +73,7 @@ self.port.on('persist-received', function (_persistent) {
         self.port.emit("config-change", 'POW');
     };
 
-    document.querySelector('#extension-version').innerHTML = persistent.version;
+    document.querySelector('#extension-version').appendChild(document.createTextNode(persistent.version));
 });
 
 document.querySelector('#options').style.display='block';

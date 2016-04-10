@@ -57,12 +57,14 @@ for (var i = 0; i < buttons.length; i++) {
 
 // Método para inserir os textos dos botões
 function setCursorEvent(element, help){
-    element.onmouseover = function(){
-        menu.innerHTML = help;
-    }
-    element.onmouseout = function(){
-        menu.innerHTML = '';
-    }
+
+    element.addEventListener('mouseenter', function(event){
+        menu.appendChild(document.createTextNode(help));
+    });
+
+    element.addEventListener('mouseleave', function(event){
+        menu.clear();
+    });
 }
 
 function getTwitchSuggestions(options, callback) {
@@ -94,7 +96,7 @@ function showStreamSuggestion() {
             var rand = randomInt(0, videos.length-1);
 
             twitchTop.className = 'click';
-            twitchTop.innerHTML = 'Veja também: '+videos[rand].game;
+            twitchTop.appendChild(document.createTextNode('Veja também: '+videos[rand].game));
             twitchTop.onclick = function(){
                 self.port.emit('tab', videos[rand].url);
             };
@@ -120,7 +122,7 @@ function showStreamInfo(stream) {
         coguLogo.src = '../assets/cogugq.png';
     }
 
-    twitchTop.innerHTML = stream.game != null ? stream.game : '';
+    twitchTop.appendChild(document.createTextNode(stream.game != null ? stream.game : ''));
     setTimeout(resetSize, 100);
 
     var streamDefault = imgLoader.load('../assets/coguinfo.png',
@@ -140,7 +142,7 @@ function showStreamInfo(stream) {
         twitchMid.appendChild(this);
     }
 
-    twitchBottom.innerHTML = liveTitle;
+    twitchBottom.appendChild(document.createTextNode(liveTitle));
     setTimeout(resetSize, 100);
 }
 
