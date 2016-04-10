@@ -61,7 +61,7 @@ var button = ToggleButton({
 var panel = panels.Panel({
     contentURL: self.data.url("pages/panel.html"),
     contentScriptFile: [
-        self.data.url("scripts/jquery.min.js"),
+        self.data.url("scripts/jquery-1.11.3.min.js"),
         self.data.url("scripts/img_loader.min.js"),
         self.data.url("scripts/howler.min.js"),
         self.data.url("scripts/panel-controller.js")
