@@ -1,7 +1,7 @@
 {
   "title": "Cogumelando",
   "name": "cogumelando-firefox",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Extensão do Cogumelando para Firefox",
   "main": "index.js",
   "author": "William Tumeo",
