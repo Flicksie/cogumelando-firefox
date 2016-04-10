@@ -99,7 +99,7 @@ function liveNotify(msg, url) {
     notifications.notify({
         title: "Cogumelando",
         text: msg,
-        iconURL: self.data.url("icon128.png"),
+        iconURL: self.data.url("iconx64.png"),
         data: url,
         onClick: function (data) {
             if (data === 'options') {

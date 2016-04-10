@@ -96,6 +96,7 @@ function showStreamSuggestion() {
             var rand = randomInt(0, videos.length-1);
 
             twitchTop.className = 'click';
+            twitchTop.clear();
             twitchTop.appendChild(document.createTextNode('Veja também: '+videos[rand].game));
             twitchTop.onclick = function(){
                 self.port.emit('tab', videos[rand].url);
@@ -122,6 +123,7 @@ function showStreamInfo(stream) {
         coguLogo.src = '../assets/cogugq.png';
     }
 
+    twitchTop.clear();
     twitchTop.appendChild(document.createTextNode(stream.game != null ? stream.game : ''));
     setTimeout(resetSize, 100);
 
